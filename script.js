@@ -85,17 +85,46 @@ const setCurrentParkingLot = function (matparLots) {
 setCurrentParkingLot(matchingParkingLots);
 
 let availableParkingSpots, currentParkingSpot, parkingSpot;
-const setCurrentParkingSpot = function (curparlot) {
-  console.log(curparlot);
-  availableParkingSpots = curparlot.parkingSpots;
-  console.log(availableParkingSpots);
+
+const getCurrentParkingSpot = function (curparlot) {
+  const displayAvailableParkingSpots = function (curparlot) {
+    console.log(curparlot);
+    availableParkingSpots = curparlot.parkingSpots;
+    console.log(availableParkingSpots);
+  };
+
+  displayAvailableParkingSpots(curparlot);
+
   parkingSpot = prompt("Pick a spot: ");
   currentParkingSpot = availableParkingSpots.find(
     (parspot) => parspot === parkingSpot
   );
   console.log(currentParkingSpot);
 };
-setCurrentParkingSpot(currentParkingLot);
+
+getCurrentParkingSpot(currentParkingLot);
+
+// const displayAvailableParkingSpots = function (curparlot) {
+//   console.log(curparlot);
+//   availableParkingSpots = curparlot.parkingSpots;
+//   console.log(availableParkingSpots);
+// };
+
+// displayAvailableParkingSpots(currentParkingLot);
+
+// const setCurrentParkingSpot = function (curparlot) {
+//   parkingSpot = prompt("Pick a spot: ");
+//   currentParkingSpot = availableParkingSpots.find(
+//     (parspot) => parspot === parkingSpot
+//   );
+//   console.log(currentParkingSpot);
+// };
+// setCurrentParkingSpot(currentParkingLot);
+
+const updateAvailableParkingSpots = function () {};
+
+updateAvailableParkingSpots(availableParkingSpots);
+
 console.log(currentParkingSpot);
 
 console.log(availableParkingSpots);
