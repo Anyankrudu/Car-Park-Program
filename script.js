@@ -41,6 +41,14 @@ const parkingLots = [
   parkingLot6,
 ];
 
+console.log("WELCOME TO DANCO PARKING PROGRAM: ");
+
+const options = prompt("DRIVE IN, FIND CAR, DRIVE OUT: ");
+
+const currentOption = function () {};
+
+currentOption();
+
 const getCarInfo = function () {
   let carType = prompt(
     "Enter car type by typing electric or nonelectric: "
@@ -76,9 +84,9 @@ displayMatchingParkingLots(carType, parkingLots);
 // Follow up: Check authenticity of zone typed in... check if it matches current matchingparkinglots and spelling as well
 let currentParkingLot;
 const setCurrentParkingLot = function (matparLots) {
-  let lot = prompt("Select parking lot by typing in the  zone: ");
+  let parkingLot = prompt("Select parking lot by typing in the  zone: ");
   currentParkingLot = matparLots.find((matparlot) =>
-    Object.values(matparlot).includes(lot)
+    Object.values(matparlot).includes(parkingLot)
   );
 };
 
@@ -121,12 +129,23 @@ getCurrentParkingSpot(currentParkingLot);
 // };
 // setCurrentParkingSpot(currentParkingLot);
 
-const updateAvailableParkingSpots = function () {};
-
-updateAvailableParkingSpots(availableParkingSpots);
-
-console.log(currentParkingSpot);
-
 console.log(availableParkingSpots);
+const updateAvailableParkingSpots = function (curparspot) {
+  let parkingSpotIndex = availableParkingSpots.indexOf(curparspot);
+  parkingSpotIndex > -1
+    ? availableParkingSpots.splice(parkingSpotIndex, 1)
+    : console.log("Parking Lot Full");
+  console.log(availableParkingSpots);
+};
 
-console.log("ok");
+updateAvailableParkingSpots(currentParkingSpot);
+
+const createParking = function (curparlot, carregnum, curparspot) {
+  curparlot[`parking${curparspot.split("")[1]}`] = {
+    parkedCar: carregnum,
+    parkedSpot: curparspot,
+  };
+};
+createParking(currentParkingLot, carRegistrationNumber, currentParkingSpot);
+
+console.log(currentParkingLot);
