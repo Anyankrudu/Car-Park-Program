@@ -3,8 +3,8 @@ const parkingLot1 = {
   parkingPrice: 4,
   electricCharge: { neste: 4, ABC: 6.2, Shell: 8.3 },
   parkingSpots: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"],
-  // EPJ398: "A3",
-  // LSY197: "A10",
+  EPJ398: "A3",
+  LSY197: "A10",
 };
 const parkingLot2 = {
   parkZone: "ZONEB",
@@ -17,8 +17,8 @@ const parkingLot3 = {
   parkingPrice: 7.5,
   electricCharge: { neste: 2.5, ABC: 4.9, Shell: 5 },
   parkingSpots: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
-  // LKW388: "C7",
-  // LBH197: "C4",
+  LKW388: "C7",
+  LBH197: "C4",
 };
 const parkingLot4 = {
   parkZone: "ZONED",
@@ -47,7 +47,7 @@ const parkingLots = [
 
 console.log("WELCOME TO DANCO PARKING PROGRAM: ");
 
-let matchingParkingLots;
+let matchingParkingLots, foundParkingLot;
 const currentAction = function () {
   const action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
   if (action === "drivein") {
@@ -55,7 +55,7 @@ const currentAction = function () {
   } else if (action === "findcar") {
     findCar(parkingLots);
   } else if (action === "driveout") {
-    console.log("jjhsaja");
+    driveOut(parkingLots);
   }
 };
 
@@ -88,6 +88,10 @@ function displayMatchingParkingLots(carty, parLots) {
   }
   [lot1, lot2, lot3] = matchingParkingLots;
   console.log(lot1, lot2, lot3);
+}
+
+function findParkingLot(parlots, carregnum) {
+  return parlots.find((parlot) => parlot[`${carregnum}`]);
 }
 
 function driveIn() {
@@ -123,6 +127,7 @@ function driveIn() {
     displayAvailableParkingSpots(curparlot);
 
     //Follow up: check if parking spot is still available.. or taken
+    // also check to ensure the parking spot is from the available parking sppot array..
     parkingSpot = prompt("Pick a spot: ").toUpperCase();
     currentParkingSpot = availableParkingSpots.find(
       (parspot) => parspot === parkingSpot
@@ -148,19 +153,23 @@ function driveIn() {
   console.clear();
   console.log(currentParkingLot);
   currentAction();
-  console.clear();
 }
 
 function findCar(parlots) {
   let [carType, carRegistrationNumber] = getCarInfo();
-  let foundLot = parlots.find((parlot) => parlot[`${carRegistrationNumber}`]);
+
+  foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
 
   let foundCarDetails = `Car ${carRegistrationNumber} is parked in ${
-    foundLot.parkZone
-  } at spot ${foundLot[`${carRegistrationNumber}`]}`;
+    foundParkingLot.parkZone
+  } at spot ${foundParkingLot[`${carRegistrationNumber}`]}`;
 
   console.clear();
   console.log(foundCarDetails);
   currentAction();
-  console.clear();
+}
+
+function driveOut(parlots) {
+  let [carType, carRegistrationNumber] = getCarInfo();
+  foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
 }
