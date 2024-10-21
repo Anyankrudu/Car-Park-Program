@@ -3,6 +3,8 @@ const parkingLot1 = {
   parkingPrice: 4,
   electricCharge: { neste: 4, ABC: 6.2, Shell: 8.3 },
   parkingSpots: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"],
+  EPJ398: "A3",
+  LSY197: "A10",
 };
 const parkingLot2 = {
   parkZone: "zoneB",
@@ -15,6 +17,8 @@ const parkingLot3 = {
   parkingPrice: 7.5,
   electricCharge: { neste: 2.5, ABC: 4.9, Shell: 5 },
   parkingSpots: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
+  LKW388: "C7",
+  LBH197: "C4",
 };
 const parkingLot4 = {
   parkZone: "zoneD",
@@ -50,7 +54,7 @@ const currentOption = function () {
   if (option === "drivein") {
     driveIn();
   } else if (option === "findcar") {
-    console.log("jjaaj");
+    findCar(parkingLots);
   } else if (option === "driveout") {
     console.log("jjhsaja");
   }
@@ -58,6 +62,7 @@ const currentOption = function () {
 
 currentOption();
 
+// Follow up: Check authenticity of the cartype (electric and noneelectric).... THROW ERROR
 function getCarInfo() {
   let carType = prompt(
     "Enter car type by typing electric or nonelectric: "
@@ -87,25 +92,6 @@ function displayMatchingParkingLots(carty, parLots) {
 function driveIn() {
   // Follow up : check and confirm carregnumber format.. THROW ERROR
   let [carType, carRegistrationNumber] = getCarInfo();
-  // Follow up: Check authenticity of the cartype (electric and noneelectric).... THROW ERROR
-  // let matchingParkingLots;
-  // function displayMatchingParkingLots(carty, parLots) {
-  //   if (carty === "electric") {
-  //     matchingParkingLots = parLots.filter(function (parlot) {
-  //       if (Object.hasOwn(parlot, "electricCharge")) {
-  //         return parlot;
-  //       }
-  //     });
-  //   } else {
-  //     matchingParkingLots = parLots.filter(function (parlot) {
-  //       if (!Object.hasOwn(parlot, "electricCharge")) {
-  //         return parlot;
-  //       }
-  //     });
-  //   }
-  //   [lot1, lot2, lot3] = matchingParkingLots;
-  //   console.log(lot1, lot2, lot3);
-  // }
 
   displayMatchingParkingLots(carType, parkingLots);
 
@@ -140,23 +126,6 @@ function driveIn() {
 
   getCurrentParkingSpot(currentParkingLot);
 
-  // const displayAvailableParkingSpots = function (curparlot) {
-  //   console.log(curparlot);
-  //   availableParkingSpots = curparlot.parkingSpots;
-  //   console.log(availableParkingSpots);
-  // };
-
-  // displayAvailableParkingSpots(currentParkingLot);
-
-  // const setCurrentParkingSpot = function (curparlot) {
-  //   parkingSpot = prompt("Pick a spot: ");
-  //   currentParkingSpot = availableParkingSpots.find(
-  //     (parspot) => parspot === parkingSpot
-  //   );
-  //   console.log(currentParkingSpot);
-  // };
-  // setCurrentParkingSpot(currentParkingLot);
-
   console.log(availableParkingSpots);
   const updateAvailableParkingSpots = function (curparspot) {
     let parkingSpotIndex = availableParkingSpots.indexOf(curparspot);
@@ -169,12 +138,19 @@ function driveIn() {
   updateAvailableParkingSpots(currentParkingSpot);
 
   const createParking = function (curparlot, carregnum, curparspot) {
-    curparlot[`parking${curparspot.split("")[1]}`] = {
-      parkedCar: carregnum,
-      parkedSpot: curparspot,
-    };
+    curparlot[`${carregnum}`] = curparspot;
   };
   createParking(currentParkingLot, carRegistrationNumber, currentParkingSpot);
 
   console.log(currentParkingLot);
+}
+
+function findCar(parlots) {
+  let [carType, carRegistrationNumber] = getCarInfo();
+  let foundLot = parlots.find((parlot) => parlot[`${carRegistrationNumber}`]);
+
+  let foundCarDetails = `Car is parked in ${foundLot.parkZone} at spot ${
+    foundLot[`${carRegistrationNumber}`]
+  }`;
+  console.log(foundCarDetails);
 }
