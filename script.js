@@ -1,24 +1,22 @@
 const parkingLot1 = {
   parkZone: "ZONEA",
   parkingPrice: 4,
-  electricCharge: { neste: 4, ABC: 6.2, Shell: 8.3 },
+  electricCharge: { NESTE: 4, ABC: 6.2, SHELL: 8.3 },
   parkingSpots: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"],
   EPJ398: "A3",
-  LSY197: "A10",
+  LSH911: "A10",
 };
 const parkingLot2 = {
   parkZone: "ZONEB",
   parkingPrice: 6,
-  electricCharge: { neste: 3, ABC: 5.2, Shell: 6.3 },
+  electricCharge: { NESTE: 3, ABC: 5.2, SHELL: 6.3 },
   parkingSpots: ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10"],
 };
 const parkingLot3 = {
   parkZone: "ZONEC",
   parkingPrice: 7.5,
-  electricCharge: { neste: 2.5, ABC: 4.9, Shell: 5 },
+  electricCharge: { NESTE: 2.5, ABC: 4.9, SHELL: 5 },
   parkingSpots: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
-  LKW388: "C7",
-  LBH197: "C4",
 };
 const parkingLot4 = {
   parkZone: "ZONED",
@@ -29,6 +27,8 @@ const parkingLot5 = {
   parkZone: "ZONEE",
   parkingPrice: 9,
   parkingSpots: ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"],
+  JHJ531: "E2",
+  WWW421: "E4",
 };
 const parkingLot6 = {
   parkZone: "ZONEF",
@@ -172,4 +172,49 @@ function findCar(parlots) {
 function driveOut(parlots) {
   let [carType, carRegistrationNumber] = getCarInfo();
   foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
+
+  let hoursParked = Number(prompt("Enter how many hours car was parked: "));
+
+  let electricChargePrice, electricChargeUsed, electricChargeAmt;
+  const calcElectricChargePrice = function (fndParLot) {
+    function getElectricChargeAmt() {
+      if (Object.hasOwn(fndParLot, "electricCharge")) {
+        const [neste, ABC, shell] = Object.keys(fndParLot.electricCharge);
+        electricChargeUsed = prompt(
+          `Select electric charge used by typing ${neste}, ${ABC}, ${shell}`
+        ).toUpperCase();
+      }
+      electricChargeAmt = Object.entries(fndParLot.electricCharge).find(
+        (elecchrg) => elecchrg.includes(electricChargeUsed)
+      )[1];
+    }
+
+    getElectricChargeAmt();
+
+    return (electricChargePrice = electricChargeAmt * hoursParked);
+  };
+
+  console.log(calcElectricChargePrice(foundParkingLot));
+
+  const calcParkingLotPrice = function (fndParLot) {
+    return fndParLot.parkingPrice * hoursParked;
+  };
+
+  console.log(calcParkingLotPrice(foundParkingLot));
+
+  const createParkingReceipt = function (fndParLot) {
+    console.log(` ${carRegistrationNumber} /
+  ${fndParLot.parkZone} /
+  ${electricChargeUsed} : ${electricChargeAmt}  = ${calcElectricChargePrice(
+      foundParkingLot
+    )}/
+  Parked Time : ${hoursParked} hours /
+  Total Price : ${
+    calcElectricChargePrice(foundParkingLot) +
+    calcParkingLotPrice(foundParkingLot)
+  }`);
+  };
+  createParkingReceipt(foundParkingLot);
+
+  console.log("continue");
 }
