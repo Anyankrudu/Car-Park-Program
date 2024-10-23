@@ -209,8 +209,17 @@ function driveOut(parlots) {
   let totalPrice =
     electricChargeUsed !== "no charge"
       ? calcParkingLotPrice(foundParkingLot) +
-        calcElectricChargePrice(fndParLot)
+        calcElectricChargePrice(foundParkingLot)
       : calcParkingLotPrice(foundParkingLot);
 
-      let electricdetails = electricChargeUsed !== "no charge"?
+  let electricdetails;
+  if (electricChargeUsed !== "no charge") {
+    electricdetails = `${electricChargeUsed} : ${electricChargeAmt} = ${
+      hoursParked * electricChargeAmt
+    }`;
+  } else {
+    electricdetails = "";
+  }
+
+  console.log(totalPrice, electricdetails);
 }
