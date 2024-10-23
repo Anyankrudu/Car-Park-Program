@@ -177,24 +177,28 @@ function driveOut(parlots) {
 
   let electricChargePrice, electricChargeUsed, electricChargeAmt;
   const calcElectricChargePrice = function (fndParLot) {
-    function getElectricChargeAmt() {
-      if (Object.hasOwn(fndParLot, "electricCharge")) {
-        const [neste, ABC, shell] = Object.keys(fndParLot.electricCharge);
-        electricChargeUsed = prompt(
-          `Select electric charge used by typing ${neste}, ${ABC}, ${shell}`
-        ).toUpperCase();
-      }
-      electricChargeAmt = Object.entries(fndParLot.electricCharge).find(
-        (elecchrg) => elecchrg.includes(electricChargeUsed)
-      )[1];
-    }
-
-    getElectricChargeAmt();
+    electricChargeAmt = Object.entries(fndParLot.electricCharge).find(
+      (elecchrg) => elecchrg.includes(electricChargeUsed)
+    )[1];
 
     return (electricChargePrice = electricChargeAmt * hoursParked);
   };
 
-  console.log(calcElectricChargePrice(foundParkingLot));
+  function checkElectricChargeUsed(fndParLot) {
+    if (Object.hasOwn(fndParLot, "electricCharge")) {
+      const [neste, ABC, shell] = Object.keys(fndParLot.electricCharge);
+      electricChargeUsed = prompt(
+        `Select electric charge used by typing ${neste}, ${ABC}, ${shell}`
+      ).toUpperCase();
+      console.log(calcElectricChargePrice(fndParLot));
+    } else {
+      electricChargeUsed = "no charge";
+    }
+
+    return electricChargeUsed;
+  }
+
+  console.log(checkElectricChargeUsed(foundParkingLot));
 
   const calcParkingLotPrice = function (fndParLot) {
     return fndParLot.parkingPrice * hoursParked;
@@ -202,19 +206,11 @@ function driveOut(parlots) {
 
   console.log(calcParkingLotPrice(foundParkingLot));
 
-  const createParkingReceipt = function (fndParLot) {
-    console.log(` ${carRegistrationNumber} /
-  ${fndParLot.parkZone} /
-  ${electricChargeUsed} : ${electricChargeAmt}  = ${calcElectricChargePrice(
-      foundParkingLot
-    )}/
-  Parked Time : ${hoursParked} hours /
-  Total Price : ${
-    calcElectricChargePrice(foundParkingLot) +
-    calcParkingLotPrice(foundParkingLot)
-  }`);
-  };
-  createParkingReceipt(foundParkingLot);
+  let totalPrice =
+    electricChargeUsed !== "no charge"
+      ? calcParkingLotPrice(foundParkingLot) +
+        calcElectricChargePrice(fndParLot)
+      : calcParkingLotPrice(foundParkingLot);
 
-  console.log("continue");
+      let electricdetails = electricChargeUsed !== "no charge"?
 }
