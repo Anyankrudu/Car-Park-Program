@@ -48,7 +48,7 @@ const parkingLots = [
 console.log("WELCOME TO DANCO PARKING PROGRAM: ");
 
 let matchingParkingLots, foundParkingLot;
-const currentAction = function () {
+const currentAction = function (parLots) {
   const action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
   if (action === "drivein") {
     driveIn();
@@ -90,6 +90,7 @@ function displayMatchingParkingLots(carty, parLots) {
   console.log(lot1, lot2, lot3);
 }
 
+// Follow up : check better name for function findParkingLot
 function findParkingLot(parlots, carregnum) {
   return parlots.find((parlot) => parlot[`${carregnum}`]);
 }
@@ -152,7 +153,7 @@ function driveIn() {
 
   console.clear();
   console.log(currentParkingLot);
-  currentAction();
+  currentAction(parkingLots);
 }
 
 function findCar(parlots) {
@@ -166,11 +167,12 @@ function findCar(parlots) {
 
   console.clear();
   console.log(foundCarDetails);
-  currentAction();
+  currentAction(parkingLots);
 }
 
 function driveOut(parlots) {
   let [carType, carRegistrationNumber] = getCarInfo();
+  console.log(parkingLot3);
   foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
 
   let hoursParked = Number(prompt("Enter how many hours car was parked: "));
@@ -190,16 +192,16 @@ function driveOut(parlots) {
       electricChargeUsed = prompt(
         `Select electric charge used by typing ${neste}, ${ABC}, ${shell}`
       ).toUpperCase();
-      console.log(calcElectricChargePrice(fndParLot));
+      calcElectricChargePrice(fndParLot);
     } else {
       electricChargeUsed = "no charge";
     }
 
     return electricChargeUsed;
   }
+  checkElectricChargeUsed(foundParkingLot);
 
-  console.log(checkElectricChargeUsed(foundParkingLot));
-
+  // Follow up: Update available parking lot when user drives out
   const calcFinalPrice = function (fndParLot) {
     let parkingLotPrice = fndParLot.parkingPrice * hoursParked;
     return (finalPrice =
@@ -220,6 +222,27 @@ function driveOut(parlots) {
     return electricChargeDetails;
   };
 
+  const updateParkingSpots = function (fndParLot) {
+    let curParkingSpot = fndParLot[`${carRegistrationNumber}`];
+    console.log(curParkingSpot);
+    console.log(fndParLot.parkingSpots);
+    let curParkingSpotIndex = fndParLot.parkingSpots.findIndex(
+      (spot) => spot > curParkingSpot
+    );
+    console.log(curParkingSpotIndex);
+    fndParLot.parkingSpots = fndParLot.parkingSpots.splice(
+      curParkingSpotIndex,
+      0,
+      curParkingSpot
+    );
+    console.log(fndParLot.parkingSpots);
+
+    delete fndParLot[`${carRegistrationNumber}`];
+    console.log(fndParLot);
+  };
+  updateParkingSpots(foundParkingLot);
+
+  // Follow up: add dollar signs to receipt
   const createReceipt = function (fndParLot) {
     console.log(`${carRegistrationNumber}
     ${fndParLot.parkZone}
