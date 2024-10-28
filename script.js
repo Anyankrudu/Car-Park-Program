@@ -3,8 +3,6 @@ const parkingLot1 = {
   parkingPrice: 4,
   electricCharge: { NESTE: 4, ABC: 6.2, SHELL: 8.3 },
   parkingSpots: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"],
-  EPJ398: "A3",
-  LSH911: "A10",
 };
 const parkingLot2 = {
   parkZone: "ZONEB",
@@ -21,14 +19,12 @@ const parkingLot3 = {
 const parkingLot4 = {
   parkZone: "ZONED",
   parkingPrice: 9,
-  parkingSpots: ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"],
+  parkingSpots: ["D1", "D2"],
 };
 const parkingLot5 = {
   parkZone: "ZONEE",
   parkingPrice: 9,
   parkingSpots: ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"],
-  JHJ531: "E2",
-  WWW421: "E4",
 };
 const parkingLot6 = {
   parkZone: "ZONEF",
@@ -45,11 +41,14 @@ const parkingLots = [
   parkingLot6,
 ];
 
+// "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"
+
 console.log("WELCOME TO DANCO PARKING PROGRAM: ");
 
-let matchingParkingLots, foundParkingLot;
+let currentParkingLot;
 const currentAction = function (parLots) {
   const action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
+  console.clear();
   if (action === "drivein") {
     driveIn();
   } else if (action === "findcar") {
@@ -61,77 +60,70 @@ const currentAction = function (parLots) {
 
 currentAction(parkingLots);
 
-// Follow up: Check authenticity of the cartype (electric and noneelectric).... THROW ERROR
 function getCarInfo() {
-  let carType = prompt(
-    "Enter car type by typing electric or nonelectric: "
-  ).toLowerCase();
   let carRegistrationNumber = prompt(
     "Enter car Registration Number: "
   ).toUpperCase();
-  return [carType, carRegistrationNumber];
+  return [carRegistrationNumber];
 }
 
-function displayMatchingParkingLots(carty, parLots) {
-  if (carty === "electric") {
-    matchingParkingLots = parLots.filter(function (parlot) {
-      if (Object.hasOwn(parlot, "electricCharge")) {
-        return parlot;
-      }
-    });
+function displayParkingLots(parlots) {
+  parlots.forEach((parlot) => console.log(parlot));
+}
+
+// Follow up: Check authenticity of zone typed in... check if it matches current matchingparkinglots and spelling as well
+
+function setCurrentParkingLot(parlots) {
+  let zone = prompt(
+    "Select parking lot by typing in the  zone: "
+  ).toUpperCase();
+  return parlots.find((parlot) => Object.values(parlot).includes(zone));
+}
+
+function locateCurrentParkingLot(parlots, carregnum) {
+  currentParkingLot = parlots.find((parlot) => parlot[`${carregnum}`]);
+  console.log(currentParkingLot);
+  if (currentParkingLot !== undefined) {
+    return currentParkingLot;
   } else {
-    matchingParkingLots = parLots.filter(function (parlot) {
-      if (!Object.hasOwn(parlot, "electricCharge")) {
-        return parlot;
-      }
-    });
+    console.log("Car not found. Check car registration number and Try again: ");
   }
-  [lot1, lot2, lot3] = matchingParkingLots;
-  console.log(lot1, lot2, lot3);
-}
-
-// Follow up : check better name for function findParkingLot
-function findParkingLot(parlots, carregnum) {
-  return parlots.find((parlot) => parlot[`${carregnum}`]);
 }
 
 function driveIn() {
   // Follow up : check and confirm carregnumber format..
   // Make sure carregnum has 3 letters and 3 words
   // check for matches as well if number is similar to another... THROW ERROR
-  let [carType, carRegistrationNumber] = getCarInfo();
+  let [carRegistrationNumber] = getCarInfo();
 
-  displayMatchingParkingLots(carType, parkingLots);
+  displayParkingLots(parkingLots);
 
-  // Follow up: Check authenticity of zone typed in... check if it matches current matchingparkinglots and spelling as well
-  let currentParkingLot;
-  const setCurrentParkingLot = function (matparLots) {
-    let parkingLot = prompt(
-      "Select parking lot by typing in the  zone: "
-    ).toUpperCase();
-    currentParkingLot = matparLots.find((matparlot) =>
-      Object.values(matparlot).includes(parkingLot)
-    );
-  };
+  currentParkingLot = setCurrentParkingLot(parkingLots);
 
-  setCurrentParkingLot(matchingParkingLots);
+  let availableParkingSpots, currentParkingSpot, spot;
 
-  let availableParkingSpots, currentParkingSpot, parkingSpot;
-
-  const getCurrentParkingSpot = function (curparlot) {
-    const displayAvailableParkingSpots = function (curparlot) {
-      console.log(curparlot);
+  const displayAvailableParkingSpots = function (curparlot) {
+    if (curparlot.parkingSpots.length > 0) {
       availableParkingSpots = curparlot.parkingSpots;
       console.log(availableParkingSpots);
-    };
+    } else {
+      console.clear();
+      console.log(
+        "Parking spots full. Kindly retart Parking and choose another zone"
+      );
+      driveIn();
+    }
+  };
 
+  const getCurrentParkingSpot = function (curparlot) {
+    console.clear();
     displayAvailableParkingSpots(curparlot);
-
     //Follow up: check if parking spot is still available.. or taken
     // also check to ensure the parking spot is from the available parking sppot array..
-    parkingSpot = prompt("Pick a spot: ").toUpperCase();
+
+    spot = prompt("Pick a spot: ").toUpperCase();
     currentParkingSpot = availableParkingSpots.find(
-      (parspot) => parspot === parkingSpot
+      (parspot) => parspot === spot
     );
   };
 
@@ -139,9 +131,10 @@ function driveIn() {
 
   const updateAvailableParkingSpots = function (curparspot) {
     let parkingSpotIndex = availableParkingSpots.indexOf(curparspot);
-    parkingSpotIndex > -1
-      ? availableParkingSpots.splice(parkingSpotIndex, 1)
-      : console.log("Parking Lot Full");
+    availableParkingSpots =
+      parkingSpotIndex > -1
+        ? availableParkingSpots.splice(parkingSpotIndex, 1)
+        : console.log("Parking Lot Full");
   };
 
   updateAvailableParkingSpots(currentParkingSpot);
@@ -153,102 +146,97 @@ function driveIn() {
 
   console.clear();
   console.log(currentParkingLot);
+
   currentAction(parkingLots);
 }
 
 function findCar(parlots) {
-  let [carType, carRegistrationNumber] = getCarInfo();
+  let [carRegistrationNumber] = getCarInfo();
 
-  foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
+  currentParkingLot = locateCurrentParkingLot(parlots, carRegistrationNumber);
 
-  let foundCarDetails = `Car ${carRegistrationNumber} is parked in ${
-    foundParkingLot.parkZone
-  } at spot ${foundParkingLot[`${carRegistrationNumber}`]}`;
+  let currentParkingLotDetails = `Car ${carRegistrationNumber} is parked in ${
+    currentParkingLot.parkZone
+  } at spot ${currentParkingLot[`${carRegistrationNumber}`]}`;
 
   console.clear();
-  console.log(foundCarDetails);
+  console.log(currentParkingLotDetails);
   currentAction(parkingLots);
 }
 
 function driveOut(parlots) {
-  let [carType, carRegistrationNumber] = getCarInfo();
-  console.log(parkingLot3);
-  foundParkingLot = findParkingLot(parlots, carRegistrationNumber);
+  let [carRegistrationNumber] = getCarInfo();
+  // Follow up: if no current parking lot found means there is no car with such carregnumber
+  // so check if car exist in parking lot first....
+  currentParkingLot = locateCurrentParkingLot(parlots, carRegistrationNumber);
+  console.log(currentParkingLot);
 
   let hoursParked = Number(prompt("Enter how many hours car was parked: "));
 
   let electricChargePrice, electricChargeUsed, electricChargeAmt;
-  function calcElectricChargePrice(fndParLot) {
-    electricChargeAmt = Object.entries(fndParLot.electricCharge).find(
+  function calcElectricChargePrice(curparlot) {
+    electricChargeAmt = Object.entries(curparlot.electricCharge).find(
       (elecchrg) => elecchrg.includes(electricChargeUsed)
     )[1];
 
     return (electricChargePrice = electricChargeAmt * hoursParked);
   }
 
-  function checkElectricChargeUsed(fndParLot) {
-    if (Object.hasOwn(fndParLot, "electricCharge")) {
-      const [neste, ABC, shell] = Object.keys(fndParLot.electricCharge);
+  function checkElectricChargeUsed(curparlot) {
+    if (Object.hasOwn(curparlot, "electricCharge")) {
+      const [neste, ABC, shell] = Object.keys(curparlot.electricCharge);
       electricChargeUsed = prompt(
         `Select electric charge used by typing ${neste}, ${ABC}, ${shell}`
       ).toUpperCase();
-      calcElectricChargePrice(fndParLot);
+      calcElectricChargePrice(curparlot);
     } else {
       electricChargeUsed = "no charge";
     }
 
     return electricChargeUsed;
   }
-  checkElectricChargeUsed(foundParkingLot);
+  checkElectricChargeUsed(currentParkingLot);
 
-  // Follow up: Update available parking lot when user drives out
-  const calcFinalPrice = function (fndParLot) {
-    let parkingLotPrice = fndParLot.parkingPrice * hoursParked;
+  const calcFinalPrice = function (curparlot) {
+    let parkingLotPrice = curparlot.parkingPrice * hoursParked;
     return (finalPrice =
       electricChargeUsed !== "no charge"
-        ? parkingLotPrice + calcElectricChargePrice(fndParLot)
+        ? parkingLotPrice + calcElectricChargePrice(curparlot)
         : parkingLotPrice);
   };
 
   const displayElectricChargeDetails = function () {
     let electricChargeDetails;
     if (electricChargeUsed !== "no charge") {
-      electricChargeDetails = `${electricChargeUsed} : ${electricChargeAmt} = ${
+      electricChargeDetails = `${electricChargeUsed} : ${electricChargeAmt}/hour = ${
         hoursParked * electricChargeAmt
-      }`;
+      }$`;
     } else {
       electricChargeDetails = "no charge";
     }
     return electricChargeDetails;
   };
 
-  const updateParkingSpots = function (fndParLot) {
-    let curParkingSpot = fndParLot[`${carRegistrationNumber}`];
-    console.log(curParkingSpot);
-    console.log(fndParLot.parkingSpots);
-    let curParkingSpotIndex = fndParLot.parkingSpots.findIndex(
+  const updateParkingSpots = function (curparlot) {
+    let curParkingSpot = curparlot[`${carRegistrationNumber}`];
+
+    let curParkingSpotIndex = curparlot.parkingSpots.findIndex(
       (spot) => spot > curParkingSpot
     );
-    console.log(curParkingSpotIndex);
-    fndParLot.parkingSpots = fndParLot.parkingSpots.splice(
-      curParkingSpotIndex,
-      0,
-      curParkingSpot
-    );
-    console.log(fndParLot.parkingSpots);
 
-    delete fndParLot[`${carRegistrationNumber}`];
-    console.log(fndParLot);
+    curparlot.parkingSpots.splice(curParkingSpotIndex, 0, curParkingSpot);
+
+    delete curparlot[`${carRegistrationNumber}`];
+    console.log(curparlot);
   };
-  updateParkingSpots(foundParkingLot);
+  updateParkingSpots(currentParkingLot);
 
-  // Follow up: add dollar signs to receipt
-  const createReceipt = function (fndParLot) {
+  const createReceipt = function (curparlot) {
     console.log(`${carRegistrationNumber}
-    ${fndParLot.parkZone}
+    ${curparlot.parkZone}
     ${displayElectricChargeDetails()}
-    ${hoursParked}
-    ${calcFinalPrice(foundParkingLot)}`);
+    ${hoursParked}hours
+    ${calcFinalPrice(curparlot)}$`);
   };
-  createReceipt(foundParkingLot);
+  createReceipt(currentParkingLot);
 }
