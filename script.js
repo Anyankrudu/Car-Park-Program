@@ -44,20 +44,27 @@ const parkingLots = [
 
 console.log("WELCOME TO DANCO PARKING PROGRAM: ");
 
-let currentParkingLot, action;
-const currentAction = function (parLots) {
-  action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
+let currentParkingLot;
+
+const getOperation = function () {
+  let operation = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
+  return operation;
+};
+
+const activateCurrentOperation = function (parLots) {
+  let currentOperation = getOperation();
   console.clear();
-  if (action === "drivein") {
+  if (currentOperation === "drivein") {
+    // console.log(startAction());
     driveIn();
-  } else if (action === "findcar") {
+  } else if (currentOperation === "findcar") {
     findCar(parLots);
-  } else if (action === "driveout") {
+  } else if (currentOperation === "driveout") {
     driveOut(parLots);
   }
 };
 
-currentAction(parkingLots);
+activateCurrentOperation(parkingLots);
 
 function getCarInfo() {
   let carRegistrationNumber = prompt(
@@ -92,7 +99,7 @@ function locateCurrentParkingLot(parlots, carregnum) {
 }
 
 function driveIn() {
-  console.log(action);
+  // console.log(operation);
   // Follow up : check and confirm carregnumber format..
   // Make sure carregnum has 3 letters and 3 words
   // check for matches as well if number is similar to another... THROW ERROR
@@ -147,7 +154,7 @@ function driveIn() {
   console.clear();
   console.log(currentParkingLot);
 
-  currentAction(parkingLots);
+  activateCurrentOperation(parkingLots);
 }
 
 function findCar(parlots) {
@@ -161,7 +168,7 @@ function findCar(parlots) {
 
   console.log(currentParkingLotDetails);
 
-  currentAction(parkingLots);
+  activateCurrentOperation(parkingLots);
 }
 
 function driveOut(parlots) {
