@@ -19,7 +19,8 @@ const parkingLot3 = {
 const parkingLot4 = {
   parkZone: "ZONED",
   parkingPrice: 9,
-  parkingSpots: ["D1", "D2"],
+  parkingSpots: ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"],
+  EPJ422: "D1",
 };
 const parkingLot5 = {
   parkZone: "ZONEE",
@@ -41,13 +42,11 @@ const parkingLots = [
   parkingLot6,
 ];
 
-// "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"
-
 console.log("WELCOME TO DANCO PARKING PROGRAM: ");
 
-let currentParkingLot;
+let currentParkingLot, action;
 const currentAction = function (parLots) {
-  const action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
+  action = prompt("DRIVEIN, FINDCAR, DRIVEOUT: ").toLowerCase();
   console.clear();
   if (action === "drivein") {
     driveIn();
@@ -71,7 +70,7 @@ function displayParkingLots(parlots) {
   parlots.forEach((parlot) => console.log(parlot));
 }
 
-// Follow up: Check authenticity of zone typed in... check if it matches current matchingparkinglots and spelling as well
+// Follow up: Check authenticity of zone typed in... check mostly for spelling..
 
 function setCurrentParkingLot(parlots) {
   let zone = prompt(
@@ -82,15 +81,18 @@ function setCurrentParkingLot(parlots) {
 
 function locateCurrentParkingLot(parlots, carregnum) {
   currentParkingLot = parlots.find((parlot) => parlot[`${carregnum}`]);
-  console.log(currentParkingLot);
-  if (currentParkingLot !== undefined) {
-    return currentParkingLot;
+  if (!currentParkingLot) {
+    console.log(
+      "Sorry Car not found, Check Car registartion number and Try again: "
+    );
+    findCar(parlots);
   } else {
-    console.log("Car not found. Check car registration number and Try again: ");
+    return currentParkingLot;
   }
 }
 
 function driveIn() {
+  console.log(action);
   // Follow up : check and confirm carregnumber format..
   // Make sure carregnum has 3 letters and 3 words
   // check for matches as well if number is similar to another... THROW ERROR
@@ -118,8 +120,6 @@ function driveIn() {
   const getCurrentParkingSpot = function (curparlot) {
     console.clear();
     displayAvailableParkingSpots(curparlot);
-    //Follow up: check if parking spot is still available.. or taken
-    // also check to ensure the parking spot is from the available parking sppot array..
 
     spot = prompt("Pick a spot: ").toUpperCase();
     currentParkingSpot = availableParkingSpots.find(
@@ -159,15 +159,14 @@ function findCar(parlots) {
     currentParkingLot.parkZone
   } at spot ${currentParkingLot[`${carRegistrationNumber}`]}`;
 
-  console.clear();
   console.log(currentParkingLotDetails);
+
   currentAction(parkingLots);
 }
 
 function driveOut(parlots) {
   let [carRegistrationNumber] = getCarInfo();
-  // Follow up: if no current parking lot found means there is no car with such carregnumber
-  // so check if car exist in parking lot first....
+
   currentParkingLot = locateCurrentParkingLot(parlots, carRegistrationNumber);
   console.log(currentParkingLot);
 
@@ -199,7 +198,7 @@ function driveOut(parlots) {
 
   const calcFinalPrice = function (curparlot) {
     let parkingLotPrice = curparlot.parkingPrice * hoursParked;
-    return (finalPrice =
+    return (totalPrice =
       electricChargeUsed !== "no charge"
         ? parkingLotPrice + calcElectricChargePrice(curparlot)
         : parkingLotPrice);
@@ -208,7 +207,7 @@ function driveOut(parlots) {
   const displayElectricChargeDetails = function () {
     let electricChargeDetails;
     if (electricChargeUsed !== "no charge") {
-      electricChargeDetails = `${electricChargeUsed} : ${electricChargeAmt}/hour = ${
+      electricChargeDetails = `${electricChargeUsed} : ${electricChargeAmt}$/hour = ${
         hoursParked * electricChargeAmt
       }$`;
     } else {
@@ -235,8 +234,8 @@ function driveOut(parlots) {
     console.log(`${carRegistrationNumber}
     ${curparlot.parkZone}
     ${displayElectricChargeDetails()}
-    ${hoursParked}hours
-    ${calcFinalPrice(curparlot)}$`);
+    ${hoursParked} hours 
+    ${`Total Price : ${calcFinalPrice(curparlot)}`}$`);
   };
   createReceipt(currentParkingLot);
 }
