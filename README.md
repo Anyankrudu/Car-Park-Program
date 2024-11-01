@@ -2,7 +2,7 @@
 ## This car park program makes it easy for users to drive into a car and choose a parking spot, easily find their car if they forget the spot where it was parked, use electric charge services and get a receipt only when they drive out.
 ------------
 
-#### INTRO
+## INTRO
 The user can choose what operation they want to carry out. It could be either to drive in, find the parking lot and spot where their car is parked or drive out of parking lot and get a receipt only on their way out
 -- User fills in car registration number and picks a parking lot and spot
 -- This information gets registered
@@ -10,7 +10,7 @@ The user can choose what operation they want to carry out. It could be either to
 -- Based on this info, the user gets an automatic parking receipt with regards to the parking lot
 
 
-###### NOTES!
+#### NOTES!
 User Instructions.
 Not all parking lots have the electric charge service.
 No established format for the car registration number. 
