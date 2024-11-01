@@ -1,6 +1,6 @@
 # A CAR PARK PROGRAM!
-## This car park program makes it easy for users to drive into a car and choose a parking spot, easily find their car if they forget the spot where it was parked, use electric charge services and get a receipt only when they drive out.
-------------
+This car park program makes it easy for users to drive into a car and choose a parking spot, easily find their car if they forget the spot where it was parked, use electric charge services and get a receipt only when they drive out.
+
 
 ## INTRO
 The user can choose what operation they want to carry out. It could be either to drive in, find the parking lot and spot where their car is parked or drive out of parking lot and get a receipt only on their way out
