@@ -19,7 +19,7 @@ Run program in google chrome (chrome developer tools)
 Comments in code reading 'follow up' are for additional functionalities for further development so ignore them.
 
 
-######## KNOWN ISSUES.
+###### KNOWN ISSUES!
 Program allows duplicate car registration number. so be sure to change letters and numbers when trying.
 Program creates a parking with 'undefined' if the choosen spot is no longer available.
 
