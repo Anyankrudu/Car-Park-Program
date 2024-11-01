@@ -8,7 +8,7 @@ The user can choose what operation they want to carry out. It could be either to
 -- This information gets registered
 -- Based on this info, the user can easily be notified where their car is parked
 -- Based on this info, the user gets an automatic parking receipt with regards to the parking lot
--------------
+
 
 ###### NOTES!
 User Instructions.
@@ -17,11 +17,11 @@ No established format for the car registration number.
 --You can make your own car registration number format when trying program (Recommended format 3 letters and 3 numbers 'LSH911')
 Run program in google chrome (chrome developer tools)
 Comments in code reading 'follow up' are for additional functionalities for further development so ignore them.
--------------
+
 
 ########  KNOWN ISSUES.
 Program allows duplicate car registration number. so be sure to change letters and numbers when trying.
 Program creates a parking with 'undefined' if the choosen spot is no longer available.
--------------
+
 
 Kindly notify if you find any other issue
